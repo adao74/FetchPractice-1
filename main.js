@@ -13,6 +13,30 @@ const getPosts = () => {
     .then(posts => arrayOfPosts = posts)
 }
 
+const getFivePosts = () => {
+
+    getPosts(); // gets all 
+    arrayOfPosts.splice(5); // truncates array
+
+}
+
+const getComments = () => {
+
+    fetch('http://jsonplaceholder.typicode.com/comments')
+    .then(res => res.json())
+    .then(posts => arrayOfPosts = posts)
+
+}
+
+const getUsers = () => {
+
+    fetch('http://jsonplaceholder.typicode.com/users')
+    .then(res => res.json())
+    .then(posts => arrayOfPosts = posts)
+
+
+}
+
 // This function logs the results in your browser's console
 const consolePosts = () => {
   console.log(arrayOfPosts)
