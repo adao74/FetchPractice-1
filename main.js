@@ -1,4 +1,10 @@
-let arrayOfPosts;
+let arrayOfPosts = [];
+
+const yourPost = {
+    title: 'foo',
+    body: 'bar',
+    userId: 1
+  }
 
 // This function waits for the web page to be loaded, when it does it will run the code inside of it which happens to be getPosts()
 window.onload = function() {
@@ -6,19 +12,28 @@ window.onload = function() {
 
 }
 
-// This function is going to make a fetch request to the URL inside its parameter brackets (). Then it will turn the response (data it's getting back), saved here as res. The res.json will not be saved as posts and saved into the variable, arrayOfPosts
+const catchError = (res) => {
+    
+    console.log(res)
+
+    // For errors returned from the ENDPOINT (e.g. fetch todo that doesn't exist) (i.e. doesn't work if the error is due to endpoint typo!!!)
+    if(!res.ok) {
+        console.log("There's an error")
+        throw Error(res.statusText)  // res.statusText is passed into catch as the argument 
+    } 
+    
+    
+    return res.json()
+}
+
+
 const getPosts = () => {
-  fetch('http://jsonplaceholder.typicode.com/posts')
-    .then(res => res.json())
+    fetch('http://jsonplaceholder.typicode.com/posts')
+    .then( (response) => catchError(response))
     .then(posts => arrayOfPosts = posts)
-}
+    .catch(err => console.log(`Error,  ${err}`)) // for all errors
+  }
 
-const getFivePosts = () => {
-
-    getPosts(); // gets all 
-    arrayOfPosts.splice(5); // truncates array
-
-}
 
 const getComments = () => {
 
@@ -33,9 +48,42 @@ const getUsers = () => {
     fetch('http://jsonplaceholder.typicode.com/users')
     .then(res => res.json())
     .then(posts => arrayOfPosts = posts)
-
-
 }
+
+
+// const addPosts = () => {
+
+//     const options = {
+//       method: 'POST',
+//       body: JSON.stringify(yourPost),
+//       headers: new Headers({ 'Content-Type': 'application/json' })
+//       // headers: {
+//       //   "Content-type": "application/json; charset=UTF-8"
+//       // }
+//     }
+  
+//     //only the post you made is returned
+//     fetch('http://jsonplaceholder.typicode.com/posts', options)
+//       .then(res => res.json())
+//       .then(post => arrayOfPosts = post)
+//       .catch(error => console.error(`Error: ${error}`))
+
+//       console.log(arrayOfPosts)
+//   }
+
+//   const updatePosts = () => {
+
+//     const options = {
+//       method: 'PUT',
+//       body: JSON.stringify(yourPost),
+//       headers: new Headers({ 'Content-Type': 'application/json' })
+//     }
+//     fetch('http://jsonplaceholder.typicode.com/posts/1', options)
+//       .then(res => res.json())
+//       .then(post => console.log(post))
+//       .catch(error => console.error(`Error: ${error}`))
+//   }
+
 
 // This function logs the results in your browser's console
 const consolePosts = () => {
@@ -53,9 +101,3 @@ const displayPost = () => {
   })
 }
 
-/* 
-Your job now is to follow the functions above and use them as templates 
- to build the functionality the buttons in the index.html file already 
- have laid out in it. This way you can learn how to build fetch requests 
- and work with other APIs and become a real developer!! 
-*/
